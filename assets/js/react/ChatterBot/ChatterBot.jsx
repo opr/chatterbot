@@ -1,6 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-export default class ChatterBot extends React.Component {
+class ChatterBot extends React.Component {
 
     constructor(props) {
         super();
@@ -8,8 +9,14 @@ export default class ChatterBot extends React.Component {
     }
 
     render() {
-        return (<div>
-          Welcome to chilli's
-        </div>);
+        return (<div>welcome to chilli's<img src={this.props.logo} /></div>);
     }
 }
+
+function mapStateToProps(state) {
+    return {
+      logo: state.getIn(['logo'], null)
+    };
+}
+
+export default connect(mapStateToProps)(ChatterBot);

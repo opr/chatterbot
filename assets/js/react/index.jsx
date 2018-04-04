@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {AppContainer} from 'react-hot-loader'
-
-import ChatterBot from './ChatterBot/ChatterBot';
+import {AppContainer} from 'react-hot-loader';
+import ChatterBotContainer from './ChatterBot/ChatterBotContainer';
 
 const getRenderFunc = app => {
   return () => {
@@ -20,7 +19,7 @@ const render = (Component, element, name) => {
 };
 
 let apps = [
-    {element: document.getElementById('chatterbot-anchor'), component: <ChatterBot />, file: './ChatterBot/ChatterBot', name: 'ChatterBot'}
+    {element: document.getElementById('chatterbot-anchor'), component: <ChatterBotContainer />, file: './ChatterBot/ChatterBotContainer', name: 'ChatterBotContainer'}
 ];
 
 for (let a of apps) {
