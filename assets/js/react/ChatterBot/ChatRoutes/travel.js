@@ -3,7 +3,7 @@ export const travel = {
   logo: 'assets/img/logo.png',
   messages: {
     welcome: {
-      message: 'Welcome to chilli\'s!',
+      message: 'Hi, we are Darwin Digital. We help travel agencies make the most of the internet. How can we help you today?',
       options: [{text: 'Hello', step: 'food'}, {text: 'Goodbye', step: 'exit'}]
     },
     food: {

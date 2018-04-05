@@ -2347,7 +2347,7 @@
 | of them, this causes the container to have the  |
 | proper height.
 *************************************************/
-.cf:after, .container:after {
+.cf:after, .chatterbot:after, .container:after {
   clear: both;
   content: '';
   display: block;
@@ -2632,6 +2632,34 @@ h6 {
 | Now we can actually get on with making the site |
 | styles                                          |
 *************************************************/
+body {
+  background: #282828;
+  color: #fff; }
+
+.chatterbot-message__logo {
+  height: 50px;
+  width: 50px;
+  float: left;
+  border-radius: 30px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #560000; }
+
+.chatterbot-message__container {
+  background: #fff;
+  margin-left: 80px;
+  margin-top: 20px;
+  max-width: 400px;
+  padding: 30px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #282828; }
+
+.chatterbot {
+  margin: 0 auto;
+  max-width: 800px; }
+
 /*************************************************|
 | Container                                       |
 *************************************************/

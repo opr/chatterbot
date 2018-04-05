@@ -1,0 +1,23 @@
+@include component(chatterbot-message) {
+
+  @include part(logo) {
+    height: 50px;
+    width: 50px;
+    float: left;
+    border-radius: 30px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid $palette_a;
+  }
+
+  @include part(container) {
+    background: $white;
+    margin-left: 80px;
+    margin-top: 20px;
+    max-width: 400px;
+    padding: 30px;
+    box-sizing: border-box;
+    color: $palette_d;
+  }
+}
