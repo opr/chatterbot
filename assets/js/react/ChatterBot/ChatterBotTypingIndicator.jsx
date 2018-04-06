@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import bowser from 'bowser';
 import ChatterBotOptions from './ChatterBotOptions';
 
-class ChatterBotMessage extends React.Component {
+class ChatterBotTypingIndicator extends React.Component {
 
   constructor(props) {
     super();
@@ -25,11 +25,16 @@ class ChatterBotMessage extends React.Component {
   }
 
   render() {
-    return (<div className={'chatterbot-message'}>
+    return this.props.visible ? (<div className={'chatterbot-typing-indicator'}>
       {this.state.logoDiv}
-      <div className={'chatterbot-message__container'}>{this.props.message}</div>
-      <ChatterBotOptions chosenAnswer={this.props.chosenAnswer} messageName={this.props.messageName}/>
-    </div>);
+      <div className={'chatterbot-typing-indicator__container'}>
+        <div className={'chatterbot-typing-indicator__dot-container'}>
+          <div className={'chatterbot-typing-indicator__dot'}></div>
+          <div className={'chatterbot-typing-indicator__dot'}></div>
+          <div className={'chatterbot-typing-indicator__dot'}></div>
+        </div>
+      </div>
+    </div>) : null;
   }
 }
 
@@ -37,11 +42,8 @@ function mapStateToProps(state, ownProps) {
   console.log(ownProps);
   return {
     logoSVG: state.getIn(['logoSVG'], null),
-    logo: state.getIn(['logo'], null),
-    messageName: ownProps.messageName,
-    chosenAnswer: (ownProps.chosenAnswer === 0) ? 0 : (ownProps.chosenAnswer || -1),
-    message: state.getIn(['messages', ownProps.messageName, 'message'], 'empty message')
+    visible: state.getIn(['typing'], false)
   };
 }
 
-export default connect(mapStateToProps)(ChatterBotMessage);
+export default connect(mapStateToProps)(ChatterBotTypingIndicator);

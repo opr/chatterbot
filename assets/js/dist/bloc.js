@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "f1750d0a7fcf55b8a843"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "4794890bfe2be54bee84"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -821,13 +821,18 @@ var travel = exports.travel = {
   messages: {
     welcome: {
       message: 'Hi, we are Darwin Digital. We help travel agencies make the most of the internet. How can we help you today?',
-      options: [{ text: 'Hello', step: 'food' }, { text: 'Goodbye', step: 'exit' }]
+      options: [{ text: 'I want to be rich', step: 'riches' }, { text: 'I hate being rich', step: 'donations' }]
     },
-    food: {
-      message: 'We serve chilli'
+    riches: {
+      message: 'Maybe you should rob a bank?',
+      options: [{ text: 'I don\'t have a gun', step: 'guns' }]
     },
-    exit: {
-      message: 'thank you for visiting bye'
+    guns: {
+      message: 'We can sell you a gun for £99.99'
+    },
+    donations: {
+      message: 'We are experts on helping rich people offload some of their unneeded wealth. Please visit our offices with a briefcase full of cash and see how we can make a difference.',
+      options: [{ text: 'enter your email', type: 'email' }]
     }
   }
 };
@@ -862,6 +867,10 @@ var _ChatterBotMessage = __webpack_require__("./assets/js/react/ChatterBot/Chatt
 
 var _ChatterBotMessage2 = _interopRequireDefault(_ChatterBotMessage);
 
+var _ChatterBotTypingIndicator = __webpack_require__("./assets/js/react/ChatterBot/ChatterBotTypingIndicator.jsx");
+
+var _ChatterBotTypingIndicator2 = _interopRequireDefault(_ChatterBotTypingIndicator);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -889,7 +898,8 @@ var ChatterBot = function (_React$Component) {
         'div',
         { className: 'chatterbot' },
         _react2.default.createElement(_ChatterBotMessageHistory2.default, null),
-        _react2.default.createElement(_ChatterBotMessage2.default, { messageName: this.props.currentMessage })
+        _react2.default.createElement(_ChatterBotMessage2.default, { messageName: this.props.currentMessage }),
+        _react2.default.createElement(_ChatterBotTypingIndicator2.default, null)
       );
     }
   }]);
@@ -1061,7 +1071,7 @@ var ChatterBotMessage = function (_React$Component) {
           { className: 'chatterbot-message__container' },
           this.props.message
         ),
-        _react2.default.createElement(_ChatterBotOptions2.default, { messageName: this.props.messageName })
+        _react2.default.createElement(_ChatterBotOptions2.default, { chosenAnswer: this.props.chosenAnswer, messageName: this.props.messageName })
       );
     }
   }]);
@@ -1070,10 +1080,12 @@ var ChatterBotMessage = function (_React$Component) {
 }(_react2.default.Component);
 
 function mapStateToProps(state, ownProps) {
+  console.log(ownProps);
   return {
     logoSVG: state.getIn(['logoSVG'], null),
     logo: state.getIn(['logo'], null),
     messageName: ownProps.messageName,
+    chosenAnswer: ownProps.chosenAnswer === 0 ? 0 : ownProps.chosenAnswer || -1,
     message: state.getIn(['messages', ownProps.messageName, 'message'], 'empty message')
   };
 }
@@ -1102,6 +1114,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__("./node_modules/react-redux/es/index.js");
 
+var _ChatterBotMessage = __webpack_require__("./assets/js/react/ChatterBot/ChatterBotMessage.jsx");
+
+var _ChatterBotMessage2 = _interopRequireDefault(_ChatterBotMessage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1125,7 +1141,40 @@ var ChatterBotMessageHistory = function (_React$Component) {
   _createClass(ChatterBotMessageHistory, [{
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('div', { className: 'message-history' });
+
+      var messages = [];
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.props.messages.values()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var message = _step.value;
+
+          console.log(message);
+          messages.push(_react2.default.createElement(_ChatterBotMessage2.default, { chosenAnswer: message.getIn(['chosenAnswer']), key: message.getIn(['message']), messageName: message.getIn(['message']) }));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'message-history' },
+        messages
+      );
     }
   }]);
 
@@ -1209,8 +1258,17 @@ var ChatterBotOptions = function (_React$Component) {
 
           buttons.push(_react2.default.createElement(
             'button',
-            { onClick: function onClick() {
-                _this2.props.chooseAnswer(index);
+            {
+              disabled: _this2.props.chosenAnswer !== -1,
+              className: 'chatterbot-options__button' + (_this2.state.chosenAnswer !== -1 && _this2.state.chosenAnswer !== index ? ' --disabled' : '') + (_this2.props.chosenAnswer === -1 ? '' : _this2.props.chosenAnswer === index ? '' : ' --disabled'),
+              onClick: function onClick() {
+                _this2.props.simulateTyping();
+                setTimeout(function () {
+                  _this2.props.chooseAnswer(index);
+                }, 1500);
+                /*this.setState({
+                  chosenAnswer: index
+                });*/
               }, key: option.get('text') },
             option.get('text')
           ));
@@ -1236,7 +1294,7 @@ var ChatterBotOptions = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'chatterbot-options' },
         buttons
       );
     }
@@ -1247,11 +1305,111 @@ var ChatterBotOptions = function (_React$Component) {
 
 function mapStateToProps(state, ownProps) {
   return {
-    options: state.getIn(['messages', ownProps.messageName, 'options'], [])
+    options: state.getIn(['messages', ownProps.messageName, 'options'], []),
+    chosenAnswer: ownProps.chosenAnswer === 0 ? 0 : ownProps.chosenAnswer || -1
   };
 }
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, actionCreators)(ChatterBotOptions);
+
+/***/ }),
+
+/***/ "./assets/js/react/ChatterBot/ChatterBotTypingIndicator.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__("./node_modules/react-redux/es/index.js");
+
+var _bowser = __webpack_require__("./node_modules/bowser/src/bowser.js");
+
+var _bowser2 = _interopRequireDefault(_bowser);
+
+var _ChatterBotOptions = __webpack_require__("./assets/js/react/ChatterBot/ChatterBotOptions.jsx");
+
+var _ChatterBotOptions2 = _interopRequireDefault(_ChatterBotOptions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ChatterBotTypingIndicator = function (_React$Component) {
+  _inherits(ChatterBotTypingIndicator, _React$Component);
+
+  function ChatterBotTypingIndicator(props) {
+    _classCallCheck(this, ChatterBotTypingIndicator);
+
+    var _this = _possibleConstructorReturn(this, (ChatterBotTypingIndicator.__proto__ || Object.getPrototypeOf(ChatterBotTypingIndicator)).call(this));
+
+    var logoDiv = _react2.default.createElement('div', null);
+
+    if (props.logo) {
+      logoDiv = _react2.default.createElement('div', { className: 'chatterbot-message__logo', style: {
+          backgroundImage: 'url(' + props.logo + ')'
+        } });
+    }
+
+    if (props.logoSVG && !_bowser2.default.isUnsupportedBrowser({ msie: '8' }, window.navigator.userAgent)) {
+      logoDiv = _react2.default.createElement('div', { className: 'chatterbot-message__logo', style: {
+          backgroundImage: 'url(' + props.logoSVG + '), none'
+        } });
+    }
+
+    _this.state = _extends({}, props, { logoDiv: logoDiv });
+    return _this;
+  }
+
+  _createClass(ChatterBotTypingIndicator, [{
+    key: 'render',
+    value: function render() {
+      return this.props.visible ? _react2.default.createElement(
+        'div',
+        { className: 'chatterbot-typing-indicator' },
+        this.state.logoDiv,
+        _react2.default.createElement(
+          'div',
+          { className: 'chatterbot-typing-indicator__container' },
+          _react2.default.createElement(
+            'div',
+            { className: 'chatterbot-typing-indicator__dot-container' },
+            _react2.default.createElement('div', { className: 'chatterbot-typing-indicator__dot' }),
+            _react2.default.createElement('div', { className: 'chatterbot-typing-indicator__dot' }),
+            _react2.default.createElement('div', { className: 'chatterbot-typing-indicator__dot' })
+          )
+        )
+      ) : null;
+    }
+  }]);
+
+  return ChatterBotTypingIndicator;
+}(_react2.default.Component);
+
+function mapStateToProps(state, ownProps) {
+  console.log(ownProps);
+  return {
+    logoSVG: state.getIn(['logoSVG'], null),
+    visible: state.getIn(['typing'], false)
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(ChatterBotTypingIndicator);
 
 /***/ }),
 
@@ -1265,8 +1423,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.chooseAnswer = chooseAnswer;
+exports.simulateTyping = simulateTyping;
 function chooseAnswer(input) {
   return { type: 'CHOOSE_ANSWER', payload: input };
+}
+
+function simulateTyping() {
+  return { type: 'SIMULATE_TYPING' };
 }
 
 /***/ }),
@@ -1282,6 +1445,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.setState = setState;
 exports.setupInitialState = setupInitialState;
+exports.simulateTyping = simulateTyping;
 exports.chooseAnswer = chooseAnswer;
 
 var _immutable = __webpack_require__("./node_modules/immutable/dist/immutable.es.js");
@@ -1295,7 +1459,7 @@ function setupInitialState(state) {
     state = (0, _immutable.fromJS)(state);
   }
 
-  if (!state.getIn(['entryPoint'])) {
+  if (!state.getIn(['currentMessage'])) {
     //get first message in list and set it as the entry point
     state = state.setIn(['currentMessage'], state.getIn(['messages']).keys().next().value);
   }
@@ -1307,9 +1471,13 @@ function setupInitialState(state) {
   return state;
 }
 
+function simulateTyping(state) {
+  return state.setIn(['typing'], true);
+}
+
 function chooseAnswer(state, chosenAnswer) {
   var nextMessage = state.getIn(['messages', state.getIn(['currentMessage']), 'options', chosenAnswer, 'step']);
-  return state.setIn(['messages', state.getIn(['currentMessage']), 'chosenAnswer'], chosenAnswer).setIn(['currentMessage'], nextMessage);
+  return state.setIn(['messages', state.getIn(['currentMessage']), 'chosenAnswer'], chosenAnswer).setIn(['currentMessage'], nextMessage).setIn(['history'], state.getIn(['history']).push((0, _immutable.Map)({ message: state.getIn(['currentMessage']), chosenAnswer: chosenAnswer }))).setIn(['typing'], false);
 }
 
 /***/ }),
@@ -1333,6 +1501,9 @@ function reducer(state, action) {
 
     case 'CHOOSE_ANSWER':
       return (0, _core.chooseAnswer)(state, action.payload);
+
+    case 'SIMULATE_TYPING':
+      return (0, _core.simulateTyping)(state);
 
     default:
       return state;

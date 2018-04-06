@@ -37,7 +37,14 @@ describe('Core logic', () => {
 
     it('moves on to the correct next message after choosing an answer', () => {
       const initialState = setupInitialState(travel);
-      expect(chooseAnswer(initialState, 0).getIn(['currentMessage'])).to.equal('food');
+      expect(chooseAnswer(initialState, 0).getIn(['currentMessage'])).to.equal('riches');
+    });
+
+    it('adds the previous question and the selected answer into the history', () => {
+      const initialState = setupInitialState(travel);
+      const nextState = chooseAnswer(initialState, 0);
+      expect(nextState.getIn(['currentMessage'])).to.equal('riches');
+      expect(nextState.getIn(['history']).count()).to.equal(1);
     });
   });
 

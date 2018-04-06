@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import ChatterBotMessageHistory from './ChatterBotMessageHistory';
 import ChatterBotMessage from './ChatterBotMessage';
+import ChatterBotTypingIndicator from "./ChatterBotTypingIndicator";
 
 class ChatterBot extends React.Component {
 
@@ -12,8 +13,9 @@ class ChatterBot extends React.Component {
 
   render() {
     return (<div className={'chatterbot'}>
-      <ChatterBotMessageHistory />
-      <ChatterBotMessage messageName={this.props.currentMessage} />
+      <ChatterBotMessageHistory/>
+      <ChatterBotMessage messageName={this.props.currentMessage}/>
+      <ChatterBotTypingIndicator />
     </div>);
   }
 }

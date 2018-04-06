@@ -1,0 +1,17 @@
+@include component(chatterbot-options) {
+  @extend .cf;
+  margin-top: 20px;
+
+  @include part(button) {
+    @include transition(all, ease);
+    background: $palette_b;
+    color: $white;
+    border: 0;
+    padding: 10px 20px;
+    margin-right: 20px;
+
+    @include option(disabled) {
+      background: lighten($palette_b, 50%);
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import ChatterBotMessage from "./ChatterBotMessage";
 
 class ChatterBotMessageHistory extends React.Component {
 
@@ -9,7 +10,16 @@ class ChatterBotMessageHistory extends React.Component {
   }
 
   render() {
-    return (<div className={'message-history'}></div>);
+
+    let messages = [];
+
+    for(let message of this.props.messages.values()) {
+      console.log(message);
+      messages.push(<ChatterBotMessage chosenAnswer={message.getIn(['chosenAnswer'])} key={message.getIn(['message'])} messageName={message.getIn(['message'])} />)
+    }
+
+    return (<div className={'message-history'}>{messages}
+    </div>);
   }
 }
 

@@ -2347,7 +2347,7 @@
 | of them, this causes the container to have the  |
 | proper height.
 *************************************************/
-.cf:after, .chatterbot:after, .container:after {
+.cf:after, .chatterbot-options:after, .chatterbot-typing-indicator__dot-container:after, .chatterbot:after, .container:after {
   clear: both;
   content: '';
   display: block;
@@ -2654,7 +2654,123 @@ body {
   padding: 30px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  color: #282828; }
+  color: #282828;
+  position: relative; }
+  .chatterbot-message__container:before {
+    content: '';
+    height: 20px;
+    width: 20px;
+    background: #fff;
+    position: absolute;
+    top: 12px;
+    left: -10px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg); }
+
+.chatterbot-options {
+  margin-top: 20px; }
+  .chatterbot-options__button {
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    background: #b70000;
+    color: #fff;
+    border: 0;
+    padding: 10px 20px;
+    margin-right: 20px; }
+    .chatterbot-options__button.\--disabled {
+      background: #ffb7b7; }
+
+.chatterbot-typing-indicator__logo {
+  height: 50px;
+  width: 50px;
+  float: left;
+  border-radius: 30px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #560000; }
+
+.chatterbot-typing-indicator__dot-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+
+.chatterbot-typing-indicator__dot {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  background: #7f7f7f;
+  border-radius: 15px;
+  margin-right: 10px;
+  -webkit-animation: typingbounce 1.5s infinite;
+  animation: typingbounce 1.5s infinite;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  display: inline-block;
+  float: left; }
+  .chatterbot-typing-indicator__dot:nth-child(2) {
+    -webkit-animation-delay: .33s;
+    animation-delay: .33s; }
+  .chatterbot-typing-indicator__dot:nth-child(3) {
+    -webkit-animation-delay: .66s;
+    animation-delay: .66s; }
+  .chatterbot-typing-indicator__dot:last-child {
+    margin-right: 0; }
+
+.chatterbot-typing-indicator__container {
+  background: #fff;
+  margin-left: 80px;
+  margin-top: 20px;
+  max-width: 400px;
+  padding: 30px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #282828;
+  position: relative; }
+  .chatterbot-typing-indicator__container:before {
+    content: '';
+    height: 20px;
+    width: 20px;
+    background: #fff;
+    position: absolute;
+    top: 12px;
+    left: -10px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg); }
+
+@-webkit-keyframes typingbounce {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  25% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px); }
+  75% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px); }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); } }
+
+@keyframes typingbounce {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+  25% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px); }
+  75% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px); }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); } }
 
 .chatterbot {
   margin: 0 auto;
